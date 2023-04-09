@@ -1,35 +1,33 @@
 const axios = require('axios');
-
 const getCat = require('./category');
 
 module.exports = async (options) => {
+    // initialize variables
     var key = options.apikey
     var limit = options.limit || '1'
     var offset = options.offset || '0'
-    var uid = options.uid || 'none'
+    var uid = options.uid || null
+    var random = options.random || false
+    var category = null;
 
-    if(!options.apikey) {
-        throw new Error(`No API key was supplied, please read the docs.`)
-    }
+    // initialize random values
+    let max = 500
+    let num = Math.floor(Math.random() * max) + 1;
 
-    // if(options.username) var uid = await getUsr({ username: options.username, apikey: key })
-    // else var uid = 'none'
+    // run checks for api key and category id and ensure that category or user were defined
+    if (!options.apikey) throw new Error("No API key supplied!", {cause: "options.apikey is empty"});
+    if (options.categoryId) var category = await getCat({ categoryId: options.categoryId, apikey: key });
+    if (!uid && !category) throw new Error("Neither a Medal UID or category name was provided to latestClips")
 
-    if(options.categoryId) var category = await getCat({ categoryId: options.categoryId, apikey: key });
-    else var category = `none`; 
-
-    if(uid === "none" && category === "none") {
-        throw new Error(`You need to provide at least a Medal User ID or category name.`)
-    } else if (options.random === true) {
-        var max = 500
-        var num = Math.floor(Math.random() * max) + 1;
-        var url = `https://developers.medal.tv/v1/latest?categoryId=${category.categoryId || category}&userId=${uid}&limit=${limit}&offset=${num}`.replace('#', '%23').replace(' ', '%20')
-    } else url = `https://developers.medal.tv/v1/latest?categoryId=${category.categoryId || category}&userId=${uid}&limit=${limit}&offset=${offset}`.replace('#', '%23').replace(' ', '%20')
-
-    const clip = await axios.get(url, {
-        method: 'GET',
-        headers: { "Content-Type": "application/json", 'Authorization': key }
+    // build the URL, encode it and send the request
+    let url = encodeURI(`https://developers.medal.tv/v1/latest?${category && category[0] ? `categoryId=${category[0].categoryId}` : ""}userId=${uid}&limit=${limit}&offset=${random ? num : offset}`)
+    return axios(url, {
+        headers: {"authorization":key}
     })
-    
-    return clip.data.contentObjects
+    .then(response => {
+        return response.data.contentObjects
+    })
+    .catch(e => {
+        throw new Error("Failed to request latest Medal.tv clips", {cause:e});
+    })
 }

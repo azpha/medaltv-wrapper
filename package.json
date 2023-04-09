@@ -1,17 +1,17 @@
 {
   "name": "medaltv-wrapper",
-  "version": "3.0.3",
+  "version": "3.0.4",
   "description": "A simple Node.js wrapper for the Medal.tv Rest API",
   "main": "index.js",
   "dependencies": {
-    "axios": "^0.22.0"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "axios": "^1.3.5"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/awexxx/medaltv-wrapper.git"
+    "url": "git+https://github.com/azpha/medaltv-wrapper.git"
+  },
+  "scripts": {
+    "test": "jest ./test"
   },
   "keywords": [
     "medal",
@@ -20,10 +20,13 @@
     "javascript",
     "api"
   ],
-  "author": "Awex",
+  "author": "Alex",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/awexxx/medaltv-wrapper/issues"
+    "url": "https://github.com/azpha/medaltv-wrapper/issues"
   },
-  "homepage": "https://github.com/awexxx/medaltv-wrapper#readme"
+  "homepage": "https://thatalex.dev",
+  "devDependencies": {
+    "jest": "^29.5.0"
+  }
 }

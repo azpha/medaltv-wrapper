@@ -1,27 +1,21 @@
-## Medal.tv Javascript API Wrapper
+# Medal.tv Javascript API Wrapper
 This wrapper utilizes [Medal.tv's Developer API](https://docs.medal.tv) to return clips to your application!  
 
 ![NPM](https://nodei.co/npm/medaltv-wrapper.png?downloads=true&downloadRank=true&stars=true)
 
-### NEW!
-Categories are now searched by their name! Use game names in categoryId fields now.
-
-### Usage
+## Install via NPM
 ```
 npm i medaltv-wrapper
 ```
 
-### How do I use this?
-It's simple! Call a function, supply a couple parameters, bam! You're done!  
+# How do I use this? 
 You can see below for all the functions. It's expected you know how to work JSON data and basic Javascript.  
-You will also need a [Medal API Key](https://docs.medal.tv/api#generate-an-api-key) in order to utilize this. Use a public one if this is a public app and visa versa.  
-  
-If you're looking for a vanilla javascript version of this, please see the [VJS branch](https://github.com/awexxx/medaltv-wrapper/tree/vjs).
-  
-#### searchClips - Search via a keyword
-```
-const { searchClips } = require('medaltv-wrapper');
+You will also need a [Medal API Key](https://docs.medal.tv/api#generate-an-api-key) in order to utilize this. Use a public one if this is a public app and visa versa.
 
+See farther below for the format of returned objects.
+  
+## searchClips - Search via a keyword
+```js
 searchClips({
     apikey: `pub_xxxxxxxxxxxxxxxxxxxxxxx`,
     limit: '1',
@@ -31,8 +25,8 @@ searchClips({
 .then(clip => console.log(clip))
 ```
 
-#### latestClips - Latest clips from a category or user
-```
+## latestClips - Latest clips from a category or user
+```js
 const { latestClips } = require('medaltv-wrapper');
 
 latestClips({
@@ -45,8 +39,8 @@ latestClips({
 .then(clip => console.log(clip))
 ```
 
-#### trendingClips - Trending clips on the Medal.tv platform
-```
+## trendingClips - Trending clips on the Medal.tv platform
+```js
 const { trendingClips } = require('medaltv-wrapper');
 
 trendingClips({
@@ -58,10 +52,8 @@ trendingClips({
 .then(clip => console.log(clip))
 ```
 
-#### fetchCategories - Fetch Medal category data
-```
-const { fetchCategories } = require('medaltv-wrapper');
-
+## fetchCategories - Fetch Medal category data
+```js
 fetchCategories({
     apikey: `pub_xxxxxxxxxxxxxxxxxxxxxxx`,
     categoryId: `minecraft`
@@ -69,9 +61,47 @@ fetchCategories({
 .then(category => console.log(category))
 ```
 
-#### fetchUser - Fetch a usernames Medal UID
-This function was **deprecated** due to Medal changing user URL structures.  
-To get your category ID, follow these steps:
-- Open Medal on the web and navigate to the profile you're using.
-- Click the 3 dots on the clip modal and select **Download..**
-- The url should look like `https://cdn.medal.tv/[id]/[quality]-xxxxxxxxx.mp4`. You'll want the string of numbers in the middle.
+# FAQ
+## How do I find my user ID?
+Medal has primarily transitioned to using usernames to referenced users, however unfortunately the public API is legacy at this point and doesn't support searching by username. However, you can still retrieve your user ID!
+- Open your profile on the web with Chrome's devtools network tab open
+- After it loads, filter the requests for "/api"
+- Look for a set of numbers -- this is your user ID. For example, mine is `215577`
+
+If you navigate to `https://medal.tv/users/[id]` and you're redirected to your profile, you did everything correctly!
+
+## What do returned objects look like?
+Clip responses will be an array of clip objects. Clip objects look like this;
+```json
+{
+    "contentId": "cidxxxxxxxxx",
+    "rawFileUrl": "not_authorized",
+    "unbrandedFileUrl": "not_authorized",
+    "contentTitle": "this is a sick clip!",
+    "contentViews": 123,
+    "contentLikes": 123,
+    "contentThumbnail": "https://cdn.medal.tv/ugcc/content-thumbnail/xxxxx",
+    "categoryId": 12, // categories can be found from /v1/categories
+    "videoLengthSeconds": 14,
+    "createdTimestamp": 1680399492000, // in ms
+    "directClipUrl": "https://medal.tv/clip/id/id",
+    "embedIframeCode": "<iframe ...></iframe>", // see more about iframe options on docs.medal.tv
+    "credits": "Credits to alexav (https://medal.tv/users/215577)"
+}
+```
+
+If you're querying for a category, you'll see this;
+```json
+{
+    "categoryId": 17,
+    "categoryName": "Minecraft",
+    "alternativeName": "Minecraft",
+    "publishedClipCount": 4461683,
+    "coverPhoto": "https://cdn.medal.tv/games/background/background-minecraft-17.png",
+    "activeSessions": 14784,
+    "slug": "minecraft",
+    "isGame": true
+}
+```
+
+I plan on cleaning this up a bit in a future update and updating the URLs/organizing content engagement info in the script.
