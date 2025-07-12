@@ -1,17 +1,20 @@
 {
   "name": "medaltv-wrapper",
-  "version": "3.0.4",
-  "description": "A simple Node.js wrapper for the Medal.tv Rest API",
-  "main": "index.js",
-  "dependencies": {
-    "axios": "^1.3.5"
+  "version": "4.0.0",
+  "description": "This wrapper utilizes [Medal.tv's Developer API](https://docs.medal.tv) to return clips to your application!",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "test": "jest ./src/tests",
+    "build": "tsup"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/azpha/medaltv-wrapper.git"
-  },
-  "scripts": {
-    "test": "jest ./test"
   },
   "keywords": [
     "medal",
@@ -20,13 +23,17 @@
     "javascript",
     "api"
   ],
-  "author": "Alex",
+  "author": "Alex Frantz",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/azpha/medaltv-wrapper/issues"
   },
-  "homepage": "https://thatalex.dev",
+  "homepage": "https://github.com/azpha/medaltv-wrapper#readme",
   "devDependencies": {
-    "jest": "^29.5.0"
+    "@types/jest": "^30.0.0",
+    "ts-jest": "^29.4.0",
+    "ts-node": "^10.9.2",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3"
   }
 }
